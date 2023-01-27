@@ -1,5 +1,6 @@
 
-import React from "react";
+import React, { useContext } from "react";
+import { UsuarioLogado } from "../../../shared/contents";
 
 // interface IButtonLoginProps { // 1 quando colocar os dois potos, chama o react e passa <> esta chamando a propriedade pra usar dentro da função. esse tipagem esta dentro da pagina LOGIN, que tem o type e o evento onclick são os mesmos usados na outra input
 
@@ -15,11 +16,12 @@ interface IButtonLoginProps {
 
 
 export const ButtonLogin: React.FC<IButtonLoginProps>=({type, onClick,  children})=>{
-    return(
-        <button type={type} onClick={onClick}>
-           {children}
-        </button>
-    )
+   const { nomeUsuario } = useContext(UsuarioLogado); 
+    return (
+      <button type={type} onClick={onClick}>
+        {nomeUsuario} {children}
+      </button>
+    );
 }
 
 
