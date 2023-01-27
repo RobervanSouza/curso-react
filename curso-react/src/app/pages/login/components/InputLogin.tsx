@@ -1,15 +1,14 @@
 import React from "react";
 
 interface IInputLoginPros {
-  type?: string; // 8 o type e para não mostar a senha, tem a interrogação para que não use no email, so na senha
+  type?: string; 
   label: string;
   value: string;
 
-  onChange: (newValue: string) => void; // 6 em vez de usar o setEmail, então usa uma interface, so usa no input
+  onChange: (newValue: string) => void; 
   onPressEnter?: () => void;
 }
 
-//export const InputLogin: React.FC<IInputLoginPros> = props ={} usa dessa forma sem o ref
 
 export const InputLogin = React.forwardRef<HTMLInputElement, IInputLoginPros
 >((props, ref) => {
@@ -30,3 +29,10 @@ export const InputLogin = React.forwardRef<HTMLInputElement, IInputLoginPros
     </label>
   );
 });
+
+
+//  type?: string; // 8 o type e para não mostar a senha, tem a interrogação para que não use no email, so na senha
+
+   // onChange: (newValue: string) => void; // 6 em vez de usar o setEmail, então usa uma interface, so usa no input
+   
+   //export const InputLogin: React.FC<IInputLoginPros> = props ={}//3 usa dessa forma sem o ref
