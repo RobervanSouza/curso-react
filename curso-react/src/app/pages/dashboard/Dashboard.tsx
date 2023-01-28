@@ -29,7 +29,7 @@ export const Dashboard = () => {
             <ul>
              {lista.map((value, index, array)=>{
                 return(
-                    <li>{value}</li>
+                    <li key={value} >{value}</li> // esse kei e so pra eliminar um erro do console
                 )
              } )}
             </ul>
