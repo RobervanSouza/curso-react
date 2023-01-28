@@ -1,21 +1,27 @@
-import { createContext } from "react";
+import { createContext, useCallback } from "react";
 
 
 interface IUsuarioContext {
   nomeUsuario: "Robervan ";
-  
+  logout: () => void;
 }
 export  const UsuarioLogado = createContext<IUsuarioContext>({} as IUsuarioContext )
 
-interface UsuarioLogadoProvider {
+interface IUsuarioLogadoContext{
   children: React.ReactNode;
+ 
 }
 
-export const UsuarioLogadoProvider: React.FC<UsuarioLogadoProvider> = ({children}) => {
-
+export const UsuarioLogadoProvider: React.FC<IUsuarioLogadoContext> = ({children}) => {
+   
+   const handleLogout = useCallback(
+    () => {
+      console.log('logou')
+      
+    }, [] );
 
   return (
-    <UsuarioLogado.Provider value={{ nomeUsuario: 'Robervan ',}}>
+    <UsuarioLogado.Provider value={{ nomeUsuario: 'Robervan ', logout: handleLogout}}>
          {children}
         </UsuarioLogado.Provider>
     )

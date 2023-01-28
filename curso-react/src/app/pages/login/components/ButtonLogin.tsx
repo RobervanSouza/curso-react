@@ -19,7 +19,7 @@ export const ButtonLogin: React.FC<IButtonLoginProps> = ({
     </button>
   );
 };
- // #########################################################################################
+// #########################################################################################
 // 3 esse children e para colocar o nome ENTRAR no outro componente pai, então chama o children
 // export const ButtonLogin: React.FC<IButtonLoginProps>=({type, onClick,  children})=>{
 //     return(
