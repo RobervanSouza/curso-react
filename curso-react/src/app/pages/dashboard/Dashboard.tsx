@@ -1,21 +1,23 @@
 import { useCallback, useEffect, useState } from "react";
 import { ApiExceptions } from "../../shared/services/api/ApiExceptions";
-import { ITarefa, TarefasService } from "../../shared/services/api/tarefas/TarefasService";
-
-
+import {
+  ITarefa,
+  TarefasService,
+} from "../../shared/services/api/tarefas/TarefasService";
 
 export const Dashboard = () => {
   const [lista, setLista] = useState<ITarefa[]>([]);
 
+  // 1 todos as tarefas
   useEffect(() => {
-    TarefasService.getAll().then((result) => { // o the
-      if (result instanceof ApiExceptions){
+    TarefasService.getAll().then((result) => {
+      // o the
+      if (result instanceof ApiExceptions) {
         alert(result.message);
       } else {
         setLista(result);
       }
-    })
-   
+    });
   }, []);
 
   const handleInput: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
@@ -24,23 +26,48 @@ export const Dashboard = () => {
         if (e.currentTarget.value.trim().length === 0) return;
 
         const value = e.currentTarget.value;
-        e.currentTarget.value = ""; // limpa o consolee começa sem nada a input
-        setLista((novaLista) => {
-          if (novaLista.some((listItem) => listItem.title === value))
-            return novaLista;
-          return [
-            ...novaLista,
-            {
-              id:novaLista.length,
-              title: value,
-              isCompleted: false,
-            },
-          ];
-        });
+
+        e.currentTarget.value = ""; //1 limpa o consolee começa sem nada a input
+
+        if (lista.some((listItem) => listItem.title === value)) return;
+
+        // 1 metodo CREATE
+        TarefasService.create({ title: value, isCompleted: false }).then(
+          (result) => {
+            if (result instanceof ApiExceptions) {
+              alert(result.message);
+            } else {
+              setLista((novaLista) => [...novaLista, result]);
+            }
+          }
+        );
       }
     },
-    []
+    [lista] // passa a lista nova
   );
+
+ // essa função embaixo e pra quando for selecionada uma tarefa ela ir para o banco selecionada, quando recarregar a pagina ela não sumir
+  const handleComplete = useCallback((id: number) => {
+    const tarefaAtualizada= lista.find((tarefa) => tarefa.id === id);
+    if(!tarefaAtualizada) return;
+
+    TarefasService.updateById(id, {
+      ...tarefaAtualizada,
+      isCompleted: !tarefaAtualizada.isCompleted,
+    }).then((result) => {
+        if (result instanceof ApiExceptions) {
+          alert(result.message);
+        } else {
+          setLista(listaVelha => {
+            return listaVelha.map(listaVelhaItem => {
+             if (listaVelhaItem.id === id) return result;
+             return listaVelhaItem;
+            });
+          });
+        }
+    });
+
+  },[lista]);
 
   return (
     <div>
@@ -51,31 +78,18 @@ export const Dashboard = () => {
 
       <input onKeyDown={handleInput} />
       <p>
-        
-        Conta quantos itens estão selecionados:  {lista.filter((listItem) => listItem.isCompleted).length}
+        Conta quantos itens estão selecionados:{" "}
+        {lista.filter((listItem) => listItem.isCompleted).length}
       </p>
       <ul>
-        {lista.map((listItem, index, array) => {
+        {lista.map((listItem) => {
           return (
             <div>
               <li key={listItem.id}>
                 <input
                   type="checkbox"
                   checked={listItem.isCompleted}
-                  onChange={() => {
-                    setLista((listaVelha) => {
-                      return listaVelha.map((novaListaItem) => {
-                        const listaSelecionada =
-                          novaListaItem.title === listItem.title
-                            ? !novaListaItem.isCompleted
-                            : novaListaItem.isCompleted;
-                        return {
-                          ...novaListaItem,
-                          isCompleted: listaSelecionada,
-                        };
-                      });
-                    });
-                  }}
+                  onChange={() => handleComplete(listItem.id)}
                 />
 
                 {listItem.title}
@@ -104,9 +118,13 @@ export const Dashboard = () => {
 //    return [...novaLista, value]; // 8 quando o evento for acionado ele adiciona um novo item na lista [... = spred]o
 //   });
 
+// if (lista.some((listItem) => listItem.title === value)) return; //3 aqui faz a verificação se o titulo e igual, se for cancela e não deixa passar para o metodo create
+
 //  setLista((novaLista) => {
 //    if (novaLista.some((listItem) => listItem.title === value)) return novaLista;
 //3 esse if e para verificar se esta vindo algun=(some) item com o titulo igual, returna um bolean, retorna a lista antiga, porque não adicionar um novo item com o nome igual
+
+// setLista((novaLista) => [...novaLista, result]); //1 adiciona uma nova tarefa
 //    return [
 //      ...novaLista,
 //      {
@@ -135,15 +153,13 @@ export const Dashboard = () => {
                                 isSelected: listaSelecionada // 9 aqui tem o valor atualizado do item
                         */
 
-
-
-        // useEffect(() => {
-        //   TarefasService.getAll().then((result) => { //6 o tarefa service pega a lista no getall e passa para o THEN, o then executa uma função, que e if e else, se os dados esticer ero então cai no IF  se não cai no ELSE.
-        //     // o the
-        //     if (result instanceof ApiExceptions) { // 6 o instanceof e para chamar o apiexceptipon 
-        //       alert(result.message);
-        //     } else {
-        //       setLista(result);//3 se der certo manda a lista, esta no db.json
-        //     }
-        //   });
-        // }, []);
+// useEffect(() => {
+//   TarefasService.getAll().then((result) => { //6 o tarefa service pega a lista no getall e passa para o THEN, o then executa uma função, que e if e else, se os dados esticer ero então cai no IF  se não cai no ELSE.
+//     // o the
+//     if (result instanceof ApiExceptions) { // 6 o instanceof e para chamar o apiexceptipon
+//       alert(result.message);
+//     } else {
+//       setLista(result);//3 se der certo manda a lista, esta no db.json
+//     }
+//   });
+// }, []);

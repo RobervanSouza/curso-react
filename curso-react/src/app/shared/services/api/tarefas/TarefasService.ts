@@ -29,7 +29,7 @@ const getById = async (id: number): Promise<ITarefa | ApiExceptions> => {
 
 const create = async (
   dataToCreate: Omit<ITarefa, "id">
-): Promise<ITarefa[] | ApiExceptions> => {
+): Promise<ITarefa | ApiExceptions> => {
   //
   try {
     const { data } = await Api().post("/tarefas", dataToCreate);
@@ -39,17 +39,17 @@ const create = async (
   } // se não encontar os dados retorna o arro
 };
 
-const updateById = async (id: string, dataToUpdate: ITarefa): Promise<ITarefa[] | ApiExceptions> => {
+const updateById = async (id:number  , dataToUpdate: ITarefa): Promise<ITarefa | ApiExceptions> => {
   //
   try {
-    const { data } = await Api().put(`/tarefas/{id}`, dataToUpdate);
+    const { data } = await Api().put(`/tarefas/${id}`, dataToUpdate);
     return data;
   } catch (error: any) {
     return new ApiExceptions(error.message || "erro ao atualizar tarefas");
   } // se não encontar os dados retorna o arro
 };
 
-const deleteById = async (id: string): Promise<undefined | ApiExceptions> => {
+const deleteById = async (id: number): Promise<undefined | ApiExceptions> => {
   //
   try {
      await Api().delete(`/tarefas/{id}`);
