@@ -46,36 +46,42 @@ export const Dashboard = () => {
     <div>
       <p>Lista</p>
       <p>
-        {" "}
-        Conta quantos itens estão selecionados:{" "}
-        {lista.filter((listItem) => listItem.isCompleted).length}{" "}
+        Qauntidade de tarefas: {lista.filter((listItem) => listItem.id).length}{" "}
       </p>
+
       <input onKeyDown={handleInput} />
+      <p>
+        
+        Conta quantos itens estão selecionados:
+        {lista.filter((listItem) => listItem.isCompleted).length}
+      </p>
       <ul>
         {lista.map((listItem, index, array) => {
           return (
-            <li key={listItem.id}>
-              <input
-                type="checkbox"
-                checked={listItem.isCompleted}
-                onChange={() => {
-                  setLista((listaVelha) => {
-                    return listaVelha.map((novaListaItem) => {
-                      const listaSelecionada =
-                        novaListaItem.title === listItem.title
-                          ? !novaListaItem.isCompleted
-                          : novaListaItem.isCompleted;
-                      return {
-                        ...novaListaItem,
-                        isCompleted: listaSelecionada,
-                      };
+            <div>
+              <li key={listItem.id}>
+                <input
+                  type="checkbox"
+                  checked={listItem.isCompleted}
+                  onChange={() => {
+                    setLista((listaVelha) => {
+                      return listaVelha.map((novaListaItem) => {
+                        const listaSelecionada =
+                          novaListaItem.title === listItem.title
+                            ? !novaListaItem.isCompleted
+                            : novaListaItem.isCompleted;
+                        return {
+                          ...novaListaItem,
+                          isCompleted: listaSelecionada,
+                        };
+                      });
                     });
-                  });
-                }}
-              />
+                  }}
+                />
 
-              {listItem.title}
-            </li> // esse kei e so pra eliminar um erro do console
+                {listItem.title}
+              </li>
+            </div>
           );
         })}
       </ul>
