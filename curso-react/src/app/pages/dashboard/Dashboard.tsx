@@ -52,8 +52,7 @@ export const Dashboard = () => {
       <input onKeyDown={handleInput} />
       <p>
         
-        Conta quantos itens estão selecionados:
-        {lista.filter((listItem) => listItem.isCompleted).length}
+        Conta quantos itens estão selecionados:  {lista.filter((listItem) => listItem.isCompleted).length}
       </p>
       <ul>
         {lista.map((listItem, index, array) => {
