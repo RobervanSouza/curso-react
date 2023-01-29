@@ -1,12 +1,22 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { ApiExceptions } from "../../shared/services/api/ApiExceptions";
+import { ITarefa, TarefasService } from "../../shared/services/api/tarefas/TarefasService";
 
-interface IListaItem {
-  title: string;
-  isSelected: boolean;
-}
+
 
 export const Dashboard = () => {
-  const [lista, setLista] = useState<IListaItem[]>([]);
+  const [lista, setLista] = useState<ITarefa[]>([]);
+
+  useEffect(() => {
+    TarefasService.getAll().then((result) => { // o the
+      if (result instanceof ApiExceptions){
+        alert(result.message);
+      } else {
+        setLista(result);
+      }
+    })
+   
+  }, []);
 
   const handleInput: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     (e) => {
@@ -21,8 +31,9 @@ export const Dashboard = () => {
           return [
             ...novaLista,
             {
+              id:novaLista.length,
               title: value,
-              isSelected: false,
+              isCompleted: false,
             },
           ];
         });
@@ -37,26 +48,26 @@ export const Dashboard = () => {
       <p>
         {" "}
         Conta quantos itens estão selecionados:{" "}
-        {lista.filter((listItem) => listItem.isSelected).length}{" "}
+        {lista.filter((listItem) => listItem.isCompleted).length}{" "}
       </p>
       <input onKeyDown={handleInput} />
       <ul>
         {lista.map((listItem, index, array) => {
           return (
-            <li key={listItem.title}>
+            <li key={listItem.id}>
               <input
                 type="checkbox"
-                checked={listItem.isSelected}
+                checked={listItem.isCompleted}
                 onChange={() => {
                   setLista((listaVelha) => {
                     return listaVelha.map((novaListaItem) => {
                       const listaSelecionada =
                         novaListaItem.title === listItem.title
-                          ? !novaListaItem.isSelected
-                          : novaListaItem.isSelected;
+                          ? !novaListaItem.isCompleted
+                          : novaListaItem.isCompleted;
                       return {
                         ...novaListaItem,
-                        isSelected: listaSelecionada,
+                        isCompleted: listaSelecionada,
                       };
                     });
                   });
@@ -118,3 +129,16 @@ export const Dashboard = () => {
                                 ...novaListaItem,//8 nesse screp==... pega os itens qua ha tinha e e altera com o isselected
                                 isSelected: listaSelecionada // 9 aqui tem o valor atualizado do item
                         */
+
+
+
+        // useEffect(() => {
+        //   TarefasService.getAll().then((result) => { //6 o tarefa service pega a lista no getall e passa para o THEN, o then executa uma função, que e if e else, se os dados esticer ero então cai no IF  se não cai no ELSE.
+        //     // o the
+        //     if (result instanceof ApiExceptions) { // 6 o instanceof e para chamar o apiexceptipon 
+        //       alert(result.message);
+        //     } else {
+        //       setLista(result);//3 se der certo manda a lista, esta no db.json
+        //     }
+        //   });
+        // }, []);

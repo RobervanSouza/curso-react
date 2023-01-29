@@ -45,4 +45,4 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-START JSON-SERVER: npx json-server --watch db.json
+START BACH-ND:  "mock": "json-server --watch ./mock/db.json --port 3001" comando: yarn mock

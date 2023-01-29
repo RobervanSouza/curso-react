@@ -1,9 +1,0 @@
-{
-    "tarefas": [
-        {
-            "id": 1,
-            "title": "cursor",
-            "estaCompleta":false
-        }
-    ]
-}
