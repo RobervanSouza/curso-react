@@ -46,28 +46,48 @@ export const Dashboard = () => {
     [lista] // passa a lista nova
   );
 
- // essa função embaixo e pra quando for selecionada uma tarefa ela ir para o banco selecionada, quando recarregar a pagina ela não sumir
-  const handleComplete = useCallback((id: number) => {
-    const tarefaAtualizada= lista.find((tarefa) => tarefa.id === id);
-    if(!tarefaAtualizada) return;
+  // #################### update ######################################
+  // essa função embaixo e pra quando for selecionada uma tarefa ela ir para o banco selecionada, quando recarregar a pagina ela não sumir
+  const handleComplete = useCallback(
+    (id: number) => {
+      const tarefaAtualizada = lista.find((tarefa) => tarefa.id === id);
+      if (!tarefaAtualizada) return;
 
-    TarefasService.updateById(id, {
-      ...tarefaAtualizada,
-      isCompleted: !tarefaAtualizada.isCompleted,
-    }).then((result) => {
+      TarefasService.updateById(id, {
+        ...tarefaAtualizada,
+        isCompleted: !tarefaAtualizada.isCompleted,
+      }).then((result) => {
         if (result instanceof ApiExceptions) {
           alert(result.message);
         } else {
-          setLista(listaVelha => {
-            return listaVelha.map(listaVelhaItem => {
-             if (listaVelhaItem.id === id) return result;
-             return listaVelhaItem;
+          setLista((listaVelha) => {
+            return listaVelha.map((listaVelhaItem) => {
+              if (listaVelhaItem.id === id) return result;
+              return listaVelhaItem;
             });
           });
         }
-    });
+      });
+    },
+    [lista]
+  );
 
-  },[lista]);
+  // ####################### delete #########################
+
+  const handleDelete = useCallback((id: number) => {
+    TarefasService.deleteById(id).then((result) => {
+      if (result instanceof ApiExceptions) {
+        alert(result.message);
+      } else {
+        setLista((listaVelha) => {
+          // aqui esta removendo o item
+          return listaVelha.filter(
+            (listaVelhaItem) => listaVelhaItem.id !== id
+          );
+        });
+      }
+    });
+  }, []);
 
   return (
     <div>
@@ -93,6 +113,7 @@ export const Dashboard = () => {
                 />
 
                 {listItem.title}
+                <button onClick={() => handleDelete(listItem.id)} >Apagar</button>
               </li>
             </div>
           );
@@ -163,3 +184,28 @@ export const Dashboard = () => {
 //     }
 //   });
 // }, []);
+
+// 3>>>>>>>>>>>> e so para verificar se a tarefa esta completa
+/*
+  const handleComplete = useCallback((id: number) => { 
+    const tarefaAtualizada= lista.find((tarefa) => tarefa.id === id); //1 busca qual a tare esta alterando
+    if(!tarefaAtualizada) return; //2 so pra garantir que não vai mandar dados invalidos, na >>>const tarefaAtualizada: ITarefa | undefined<<<< ele manda itarefa ou undefind, se for undefind então e falso, se for falso então e true, se for treu então e undefind, então não returna nada e não manda para o banco de dados o item selecionado.
+
+    TarefasService.updateById(id, {
+      ...tarefaAtualizada,///3 passa todos os dados das tarefas
+      isCompleted: !tarefaAtualizada.isCompleted, // 4 para fazer alteração no banco de dados
+    }).then((result) => {
+        if (result instanceof ApiExceptions) {
+          alert(result.message);
+        } else {
+          setLista(listaVelha => { //5 o setlista e para alterar o state
+            return listaVelha.map(listaVelhaItem => {
+             if (listaVelhaItem.id === id) return result;//6 compara se o id e igual o id do parametro
+             return listaVelhaItem;
+            });
+          });
+        }
+    });
+
+  },[lista]);
+  */
