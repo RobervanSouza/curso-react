@@ -1,9 +1,14 @@
 import React from 'react'
 import { InputStyled } from './styled'
-const Input = () => {
+const Input = ({ type, placeholder, value, onChange }) => {
   return (
     <div>
-      <InputStyled/>
+      <InputStyled
+      value={value}
+      onChange={onChange}
+      type={type}
+      placeholder={placeholder}
+      />
     </div>
   )
 }

@@ -1,10 +1,11 @@
 import React from 'react'
+import { ButtonStyled } from './styled'
 
-const Button = () => {
+const Button = ({ Text, onClick, Type = "button"}) => {
   return (
-    <div>
-      button
-    </div>
+    <ButtonStyled type={Type} onClick={onClick}>
+      {Text}
+    </ButtonStyled>
   )
 }
 
