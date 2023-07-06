@@ -1,11 +1,12 @@
 import Caixa1 from "@/components/caixa/Caixa";
 import Circulo from "@/components/caixa/Circulo";
+import Evento from "@/components/caixa/Evento";
 import React from "react";
 
 const Caixa = () => {
   return (
     <>
-      <div className=" flex gap-5 p-6 cursor-pointer items-center flex-row bg-slate-200 justify-around " >
+      <div className=" flex gap-5 h-screen p-6 cursor-pointer items-center flex-row bg-slate-200 justify-around " >
         <Caixa1>
           <li>
             <ul className=" flex flex-col p-2 gap-3 ">
@@ -15,7 +16,8 @@ const Caixa = () => {
             </ul>
           </li>
         </Caixa1>
-        <Circulo texto="dentro do circulo" />
+        <Circulo texto="dentro do circulo" quadrandular={true} />  
+        <Evento/>
       </div>
     </>
   );
