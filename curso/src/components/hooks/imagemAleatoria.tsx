@@ -20,7 +20,7 @@ const ImagemAleatoria = () => {
   // Declara os estados para a URL da imagem e o nome do item
   const [imageUrl, setImageUrl] = useState("");
   const [itemName, setItemName] = useState("");
-
+  const [imagens, setImagens] = useState<number>(0);
   // Função assíncrona para buscar os dados da API
   const fetchData = async (data: string) => {
     try {
@@ -30,7 +30,7 @@ const ImagemAleatoria = () => {
 
       // Verifica se há dados retornados pela API
       if (result.data && result.data.length > 0) {
-        // Obtém o primeiro item do array de dados
+        // Obtém o primeiro item do array, quando clica mais uma vez obtem mais um itens do array.
         const todos = Math.floor(Math.random() * result.data.length)
         const item = result.data[todos];
         // Atualiza os estados da URL da imagem e do nome do item
@@ -75,7 +75,7 @@ const ImagemAleatoria = () => {
         {imageUrl && (
           <>
             <p className=" text-neutral-950">{itemName}</p>
-            <img src={imageUrl} className=" w-196 h-72"  />
+            <img src={imageUrl} className=" w-196 h-52"  />
           </>
         )}
       </div>
