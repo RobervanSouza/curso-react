@@ -6,6 +6,7 @@ const direta = () => {
     <div className='flex justify-center items-center h-screen flex-col'>
         <h1 className=' text-5xl mb-10' >Cominicação Direta</h1>
         <Avo nome='João' sobreNome='Souza'/>
+        <Avo nome='Jose' sobreNome='Silva'/>
     </div>
   )
 }
